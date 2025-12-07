@@ -22,7 +22,11 @@ app.post('/submit', async (req, res) => {
 
   try {
     // Send data to Zapier webhook
-    const zapierUrl = 'https://hooks.zapier.com/hooks/catch/25602997/ufym2hv/';
+    const zapierUrl = process.env.ZAPIER_WEBHOOK_URL;
+    if (!zapierUrl) {
+      console.error('ZAPIER_WEBHOOK_URL not set. Set it in .env for local dev.');
+      return res.status(500).json({ error: 'ZAPIER_WEBHOOK_URL not configured' });
+    }
 
     const payload = {
       timestamp: new Date().toISOString(),
